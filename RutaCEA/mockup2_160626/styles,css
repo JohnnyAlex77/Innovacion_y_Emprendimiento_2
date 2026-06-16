@@ -1,0 +1,580 @@
+/* ========================================
+   RESET Y ESTILOS BASE (Diseño alternativo)
+   ======================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #f0f4f0;
+  color: #1e2a1e;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   HEADER (Fondo oscuro, estilo moderno)
+   ======================================== */
+#main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #1a3a1a, #2a5a2a);
+  color: white;
+  flex-shrink: 0;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  background: rgba(255, 255, 255, 0.15);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #81C784;
+  backdrop-filter: blur(4px);
+}
+
+.header-left h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: white;
+  line-height: 1.2;
+}
+
+.subtitle-header {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: #A5D6A7;
+  display: block;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.header-right {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-icon {
+  background: rgba(255, 255, 255, 0.10);
+  border: none;
+  color: white;
+  font-size: 1.0rem;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.20);
+}
+
+/* ========================================
+   MAPA
+   ======================================== */
+#map-container {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: #dce6dc;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Personalización de controles Leaflet */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10) !important;
+}
+
+.leaflet-control-zoom a {
+  background: white !important;
+  color: #1a3a1a !important;
+  font-weight: 700;
+  border: 1px solid #dce6dc !important;
+}
+
+/* ========================================
+   ELEMENTOS FLOTANTES SOBRE EL MAPA
+   ======================================== */
+.floating-badge {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26, 58, 26, 0.85);
+  backdrop-filter: blur(8px);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 5;
+}
+
+.floating-badge i {
+  margin-right: 6px;
+  color: #81C784;
+}
+
+.floating-counter {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1a3a1a;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.floating-counter i {
+  color: #2E7D32;
+}
+
+/* ========================================
+   DRAWER (Panel inferior deslizable)
+   ======================================== */
+#bottom-drawer {
+  flex-shrink: 0;
+  background: #ffffff;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.06);
+  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  transition: max-height 0.3s ease;
+  position: relative;
+  z-index: 20;
+}
+
+.drawer-handle {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 4px 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.drawer-handle span {
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: #d0dcd0;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.drawer-handle:hover span {
+  background: #a0b8a0;
+}
+
+.drawer-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0 16px 16px 16px;
+}
+
+/* ========================================
+   TABS (estilo chips)
+   ======================================== */
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0 12px 0;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
+.tab-btn {
+  background: #f0f6f0;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #4a6a4a;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn i {
+  font-size: 0.8rem;
+}
+
+.tab-btn:hover {
+  background: #e4ece4;
+}
+
+.tab-btn.active {
+  background: #1a3a1a;
+  color: white;
+  box-shadow: 0 2px 8px rgba(26, 58, 26, 0.20);
+}
+
+.tab-btn.active i {
+  color: #81C784;
+}
+
+/* ========================================
+   TAB CONTENT
+   ======================================== */
+.tab-content {
+  display: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 4px 0 8px 0;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ========================================
+   TAB: EXPLORAR (Tarjetas de POIs)
+   ======================================== */
+#poi-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.poi-card {
+  background: #f8faf8;
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid #e8ede8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.poi-card:hover {
+  background: #eef4ee;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.poi-card .card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.poi-card .card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.poi-card .card-info .card-title {
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #1e2a1e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.poi-card .card-info .card-sub {
+  font-size: 0.6rem;
+  color: #6a8a6a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.poi-card .card-arrow {
+  color: #a0b8a0;
+  font-size: 0.7rem;
+}
+
+/* ========================================
+   TAB: RUTAS
+   ======================================== */
+.route-intro {
+  font-size: 0.75rem;
+  color: #4a6a4a;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.route-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.toggle-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f8faf8;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #e8ede8;
+}
+
+.toggle-item:hover {
+  background: #eef4ee;
+}
+
+.toggle-item .toggle-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.toggle-item .toggle-label {
+  flex: 1;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: #1e2a1e;
+}
+
+.toggle-item .toggle-indicator {
+  color: #a0b8a0;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.toggle-item.active-route .toggle-indicator {
+  color: #2E7D32;
+}
+
+.toggle-item.inactive-route .toggle-indicator {
+  color: #c0d0c0;
+}
+
+.toggle-item.inactive-route {
+  opacity: 0.6;
+}
+
+.btn-ghost {
+  background: none;
+  border: 1px dashed #b0c8b0;
+  padding: 10px;
+  border-radius: 12px;
+  width: 100%;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: #4a6a4a;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-ghost:hover {
+  background: #f0f6f0;
+  border-color: #2E7D32;
+  color: #1a3a1a;
+}
+
+/* ========================================
+   TAB: INFO
+   ======================================== */
+.about-card {
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.about-icon {
+  font-size: 2.2rem;
+  color: #2E7D32;
+  margin-bottom: 6px;
+}
+
+.about-card h3 {
+  font-size: 1.0rem;
+  color: #1a3a1a;
+  margin-bottom: 6px;
+}
+
+.about-card p {
+  font-size: 0.8rem;
+  color: #3a5a3a;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto 6px auto;
+}
+
+.about-badges {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.about-badges span {
+  background: #eef4ee;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #2a4a2a;
+}
+
+.about-badges span i {
+  margin-right: 4px;
+  color: #2E7D32;
+}
+
+.about-card hr {
+  border: none;
+  border-top: 1px solid #e8ede8;
+  margin: 12px 0 8px 0;
+}
+
+.about-card small {
+  font-size: 0.6rem;
+  color: #8aa88a;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (min-width: 768px) {
+  #bottom-drawer {
+    max-height: 40vh;
+  }
+
+  .floating-badge {
+    bottom: 120px;
+    font-size: 0.8rem;
+    padding: 10px 24px;
+  }
+
+  #poi-cards {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .route-toggles {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .toggle-item {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .tab-btn {
+    font-size: 0.85rem;
+    padding: 10px 24px;
+  }
+
+  .header-left h1 {
+    font-size: 1.5rem;
+  }
+
+  .subtitle-header {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #poi-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .poi-card {
+    padding: 8px 10px;
+  }
+
+  .poi-card .card-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+
+  .poi-card .card-info .card-title {
+    font-size: 0.65rem;
+  }
+
+  .poi-card .card-info .card-sub {
+    font-size: 0.55rem;
+  }
+
+  .floating-badge {
+    font-size: 0.55rem;
+    padding: 4px 12px;
+    bottom: 80px;
+  }
+
+  .floating-counter {
+    font-size: 0.6rem;
+    padding: 4px 10px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .toggle-item {
+    padding: 8px 10px;
+  }
+
+  .toggle-item .toggle-label {
+    font-size: 0.7rem;
+  }
+
+  .about-card p {
+    font-size: 0.7rem;
+  }
+}
