@@ -12,10 +12,16 @@
 ## 📂 Estructura del proyecto
 
 RutaCEA/
-├── index.html # Página principal (estructura)  
-├── styles.css # Estilos visuales (responsive)  
-├── script.js # Lógica del mapa e interactividad  
-└── README.md # Este archivo
+├── README.md # Este archivo
+├── mockup1_fecha/ # Primer mockup 
+│ ├── index.html # Página principal
+│ ├── styles.css # Estilos
+│ └── script.js # Lógica del mapa (Leaflet + POIs + rutas)
+├── mockup2_20250616/ # Segundo mockup 
+│ ├── index.html # Página principal 
+│ ├── styles.css # Estilos
+│ └── script.js # Lógica del mapa 
+└── (contenido multimedia para futuras versiones)
 
 ---
 ## 🛠️ Tecnologías utilizadas
