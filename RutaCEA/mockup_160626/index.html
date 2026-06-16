@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>RutaCEA – Mapa interactivo CEA</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome (íconos) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- CSS propio -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- HEADER -->
+    <header id="main-header">
+      <div class="header-left">
+        <i class="fas fa-leaf" style="color: #2E7D32; font-size: 1.5rem;"></i>
+        <h1>RutaCEA</h1>
+      </div>
+      <div class="header-right">
+        <button id="btn-location" class="btn-icon" title="Mi ubicación">
+          <i class="fas fa-location-dot"></i>
+        </button>
+        <button id="btn-about" class="btn-icon" title="Acerca de">
+          <i class="fas fa-circle-info"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- SUBTÍTULO -->
+    <div id="subtitle">
+      <span>Centro Educativo Ambiental – Parque O'Higgins</span>
+    </div>
+
+    <!-- MAPA -->
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+
+    <!-- PANEL INFERIOR (CONTROLES Y LISTA) -->
+    <div id="bottom-panel">
+      <!-- Pestañas -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="poi"><i class="fas fa-map-pin"></i> Puntos</button>
+        <button class="tab-btn" data-tab="routes"><i class="fas fa-route"></i> Rutas</button>
+        <button class="tab-btn" data-tab="info"><i class="fas fa-seedling"></i> Acerca</button>
+      </div>
+
+      <!-- Contenido de pestañas -->
+      <div class="tab-content active" id="tab-poi">
+        <ul id="poi-list">
+          <!-- Se llena con JS -->
+        </ul>
+      </div>
+
+      <div class="tab-content" id="tab-routes">
+        <div class="route-controls">
+          <button class="route-btn" data-route="green" style="border-left: 4px solid #2E7D32;">
+            <i class="fas fa-circle" style="color: #2E7D32;"></i> Ruta Verde
+          </button>
+          <button class="route-btn" data-route="blue" style="border-left: 4px solid #1976D2;">
+            <i class="fas fa-circle" style="color: #1976D2;"></i> Ruta Azul
+          </button>
+          <button class="route-btn" data-route="orange" style="border-left: 4px solid #F57C00;">
+            <i class="fas fa-circle" style="color: #F57C00;"></i> Ruta Naranja
+          </button>
+          <button class="route-btn" data-route="all" style="border-left: 4px solid #757575;">
+            <i class="fas fa-eye"></i> Mostrar todas
+          </button>
+        </div>
+        <p class="route-help"><i class="fas fa-info-circle"></i> Haz clic en una ruta para mostrarla/ocultarla en el mapa.</p>
+      </div>
+
+      <div class="tab-content" id="tab-info">
+        <div class="about-content">
+          <h3><i class="fas fa-leaf" style="color: #2E7D32;"></i> ¿Qué es RutaCEA?</h3>
+          <p>RutaCEA es un mapa interactivo que te guía por los espacios del <strong>Centro Educativo Ambiental</strong> dentro del Parque O'Higgins. Escanea el código QR en las entradas del parque y descubre huertos, compostaje, reciclaje y más.</p>
+          <p><i class="fas fa-route" style="color: #1976D2;"></i> Sigue las rutas de colores para llegar al CEA desde cualquier acceso.</p>
+          <p><i class="fas fa-mobile-screen-button"></i> Diseñado para tu celular, sin necesidad de descargar apps.</p>
+          <hr />
+          <p><small>Proyecto colaborativo INACAP – Innovación y Emprendimiento II</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Script propio -->
+  <script src="script.js"></script>
+</body>
+</html>
