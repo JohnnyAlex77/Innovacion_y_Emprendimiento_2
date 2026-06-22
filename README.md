@@ -1,117 +1,183 @@
-# 🌱 RutaCEA – Mapa Interactivo del Centro Educativo Ambiental
+# 🌱 RutaCEA
 
-**RutaCEA** es un mapa interactivo que guía a los visitantes del Parque O'Higgins hacia el **Centro Educativo Ambiental (CEA)** de la Municipalidad de Santiago. Muestra puntos de interés, rutas de acceso desde distintas entradas y contenido educativo sobre los espacios del CEA.
-
----
-## 🚀 Demo rápida
-1. Abre `index.html` en tu navegador.
-2. Explora el mapa con los marcadores.
-3. Haz clic en los puntos de interés para ver información.
-4. Usa el panel inferior para navegar por puntos, rutas y más.
----
-## 📂 Estructura del proyecto
-
-RutaCEA/
-├── README.md # Este archivo
-├── mockup1_fecha/ # Primer mockup
-│ ├── index.html # Página principal
-│ ├── styles.css # Estilos
-│ └── script.js # Lógica del mapa (Leaflet + POIs + rutas)
-├── mockup2_20250616/ # Segundo mockup
-│ ├── index.html # Página principal
-│ ├── styles.css # Estilos
-│ └── script.js # Lógica del mapa
-└── (contenido multimedia para futuras versiones)
+**Conectando a la comunidad de Santiago Centro con el Centro Educativo Ambiental (CEA)**
 
 ---
-## 🛠️ Tecnologías utilizadas
-| Tecnología | Uso |
-|------------|-----|
-| **HTML5** | Estructura semántica |
-| **CSS3** | Estilos personalizados, responsive |
-| **JavaScript (ES6)** | Lógica de mapa e interacciones |
-| **Leaflet.js** | Mapa interactivo (código abierto) |
-| **OpenStreetMap** | Capa base del mapa |
-| **Font Awesome** | Íconos visuales |
-| **Google Fonts (Inter)** | Tipografía moderna |
+## 📋 Tabla de Contenidos
+
+- Descripción General
+- Problemática
+- Contexto
+- Desafío
+- Solución Propuesta
+- Datos del Parque O'Higgins
+- Rutas Disponibles
+- Tecnologías Utilizadas
+- Mapas y Geolocalización
+- Estilos y UI
+---
+## 🌿 Descripción General
+
+**RutaCEA** es una solución innovadora que busca conectar a la comunidad de Santiago Centro con el **Centro Educativo Ambiental (CEA)** de la Municipalidad de Santiago, ubicado dentro del **Parque O'Higgins**.
+
+La aplicación guía a los visitantes a través de un mapa interactivo con rutas de colores y puntos de interés educativo, promoviendo la adopción de prácticas de economía circular y sustentabilidad en la vida cotidiana.
 
 ---
-## 🧭 Funcionalidades principales
-| Funcionalidad | Descripción |
-|---------------|-------------|
-| **Mapa interactivo** | Visualiza el Parque O'Higgins y el CEA con marcadores personalizados |
-| **Puntos de interés (POIs)** | 7 puntos clave: CEA, huerto, compostaje, reciclaje y entradas |
-| **Rutas de acceso** | 3 rutas con colores (Verde, Azul, Naranja) desde distintas entradas |
-| **Panel inferior** | Pestañas: Puntos (lista interactiva), Rutas (mostrar/ocultar), Acerca de |
-| **Mi ubicación** | Georreferencia tu posición actual en el mapa |
-| **Diseño responsive** | Adaptado para celulares, tabletas y escritorio |
+## 🎯 Problemática
+
+### Datos de la Investigación
+
+- ❌ **8 de cada 10 estudiantes** NUNCA han visto información del CEA
+- ❌ **5 de cada 5 jefes de hogar** NO separan residuos orgánicos
+- ❌ **Principales barreras**:
+    - Falta de tiempo
+    - Espacio insuficiente
+    - Desconocimiento del tema
+    - Miedo a plagas
+- ❌ **Desconexión crítica** entre el conocimiento ambiental y la acción cotidiana
+---
+## 📍 Contexto
+
+El **Centro Educativo Ambiental (CEA)** de la Municipalidad de Santiago ofrece valiosos recursos educativos sobre sustentabilidad, economía circular y prácticas ambientales. Sin embargo, existe una brecha significativa entre la comunidad y estos recursos, especialmente entre estudiantes y jefes de hogar.
+
+El CEA se encuentra ubicado dentro del **Parque O'Higgins**, un espacio público clave en la comuna de Santiago que recibe a miles de visitantes diariamente. A pesar de su ubicación estratégica y la importancia de sus programas educativos, el centro es desconocido para la mayoría de los habitantes de la comuna.
 
 ---
-## 🔧 Cómo ejecutar localmente
-### Opción 1: Live Server (recomendada)
-1. Instala la extensión **Live Server** en VSCode.
-2. Abre la carpeta del proyecto.
-3. Haz clic derecho en `index.html` y selecciona **Open with Live Server**.
-### Opción 2: Directo en navegador
-1. Abre la carpeta del proyecto.
-2. Haz doble clic en `index.html` para abrirlo en tu navegador.
+## 💡 Desafío
+
+> **"¿Cómo podríamos facilitar la participación y comprensión de la comunidad de Santiago Centro respecto a las acciones del CEA, mediante experiencias accesibles, visibles y motivadoras, para aumentar en al menos un 20% la adopción de prácticas de economía circular durante el primer año de implementación?"**
 
 ---
-## 📦 Personalización
-### Agregar un nuevo punto de interés
-Edita el arreglo `POINTS` en `script.js`:
-```javascript
-{
-  id: 'nuevo-punto',
-  nombre: 'Nombre del lugar',
-  coords: [-33.4600, -70.6650],
-  icono: 'fa-tree',
-  color: '#4CAF50',
-  descripcion: 'Descripción breve del lugar.'
-}
-```
-### Agregar o modificar una ruta
+## 🗺️ Solución Propuesta
 
-Edita el objeto `RUTAS` en `script.js`:
+**RutaCEA** propone:
 
-```javascript
+|Componente|Descripción|
+|---|---|
+|**🗺️ Mapa Interactivo**|Visualización del Parque O'Higgins con rutas y puntos de interés usando Leaflet y OpenStreetMap|
+|**🚪 3 Rutas Accesibles**|Rutas de colores (Verde, Azul, Naranja) desde diferentes puertas de entrada del parque|
+|**📚 Contenido Educativo**|Información detallada sobre prácticas sustentables en cada punto de interés|
+|**📱 Experiencia Mobile**|Diseño adaptado para dispositivos móviles con interacciones táctiles|
+|**🏆 Gamificación**|Sistema de puntos y logros para motivar la participación y el aprendizaje|
+|**📍 Geolocalización**|Ubicación del usuario en tiempo real para navegación precisa|
 
-nueva: {
-  id: 'nueva',
-  nombre: 'Ruta Nueva',
-  color: '#FF5722',
-  puntos: [
-    [-33.4610, -70.6640],
-    [-33.4600, -70.6650],
-    [-33.4598, -70.6638]
-  ]
-}
-```
-### Cambiar colores
+---
+## 🗺️ Datos del Parque O'Higgins
 
-Busca en `styles.css` la variable `#2E7D32` (verde principal) y reemplázala por el color deseado.
+### Coordenadas de los Puntos de Interés
+
+|Ubicación|Latitud|Longitud|Icono|Tipo|
+|---|---|---|---|---|
+|**🏛️ Centro Educativo Ambiental (CEA)**|-33.46403756318918|-70.66265950496233|🏛️|Destino|
+|**🚪 Puerta Metro O'Higgins**|-33.460633988030054|-70.65835487634902|🚪|Entrada|
+|**🚪 Puerta Beauchef**|-33.460597099786604|-70.66386247064762|🚪|Entrada|
+|**🚪 Puerta Rondizzoni**|-33.46978340588195|-70.65958600292596|🚪|Entrada|
+|**🌿 Huerto Comunitario**|-33.4641296733008|-70.66252323979717|🌿|Interés|
+|**♻️ Punto de Compostaje**|-33.46420117310819|-70.66254692201362|♻️|Interés|
+|**🗑️ Punto de Reciclaje**|-33.46408263401791|-70.66274314688243|🗑️|Interés|
 
 ---
 
-## 🌐 Créditos y referentes
+## 🚦 Rutas Disponibles
 
-- **Mapa base**: OpenStreetMap
-- **Biblioteca de mapas**: [Leaflet.js](https://leafletjs.com/)
-- **Íconos**: [Font Awesome](https://fontawesome.com/)
-- **Tipografía**: [Google Fonts – Inter](https://fonts.google.com/specimen/Inter)
-- **Inspiración visual**: Mapcarta, High Line Park (señalética integrada)
+|Ruta|Color|Código HEX|Duración|Distancia|Puerta de Entrada|
+|---|---|---|---|---|---|
+|**Verde**|🟢|`#4CAF50`|10 min|0.8 km|Metro O'Higgins|
+|**Azul**|🔵|`#2196F3`|15 min|1.2 km|Beauchef|
+|**Naranja**|🟠|`#FF9800`|20 min|1.8 km|Rondizzoni|
+### Descripción de Rutas
 
-Proyecto desarrollado por estudiantes de **INACAP** – Innovación y Emprendimiento II.
+**Ruta Verde (Corta)**
+
+- Punto de partida: Metro Parque O'Higgins
+- Recorrido: Sector norte del parque
+- Ideal para: Visitas rápidas o con poco tiempo
+
+**Ruta Azul (Media)**
+
+- Punto de partida: Av. Beauchef
+- Recorrido: Centro del parque
+- Ideal para: Visitas con tiempo moderado
+
+**Ruta Naranja (Larga)**
+
+- Punto de partida: Av. General Rondizzoni
+- Recorrido: Todo el parque
+- Ideal para: Visitas completas y exploración
 
 ---
 
-## 📝 Licencia
+## 🛠️ Tecnologías Utilizadas
 
-Este proyecto es de uso educativo y colaborativo. Puedes usarlo, modificarlo y compartirlo libremente con fines no comerciales.
+### Frontend
+
+|Tecnología|Versión|Uso|
+|---|---|---|
+|**HTML5**|-|Estructura semántica de las páginas|
+|**CSS3**|-|Estilos personalizados y animaciones|
+|**JavaScript ES6**|-|Lógica e interactividad del mapa|
+|**React**|18.2.0|Framework para interfaces de usuario (Mockup 4)|
+|**Vite**|4.3.9|Bundler y servidor de desarrollo (Mockup 4)|
+### Tecnologías por Mockup
+
+|Mockup|Tecnologías Principales|Framework|
+|---|---|---|
+|**Mockup 1-3**|HTML5, CSS3, JavaScript ES6|Sin framework|
+|**Mockup 4**|React, Vite, JSX|React 18.2.0|
+
+---
+## 🗺️ Mapas y Geolocalización
+
+|Tecnología|Versión|Uso|
+|---|---|---|
+|**Leaflet**|1.9.4|Biblioteca de mapas interactivos de código abierto|
+|**React Leaflet**|4.2.1|Componentes React para Leaflet (Mockup 4)|
+|**OpenStreetMap**|-|Capa base del mapa (gratuita y de código abierto)|
+|**Geolocation API**|-|API nativa del navegador para ubicación del usuario|
+### Características de Mapas
+
+- ✅ **Marcadores personalizados** con emojis y colores
+- ✅ **Polilíneas de rutas** con diferentes colores
+- ✅ **Zoom y pan** interactivo
+- ✅ **Popup informativos** al hacer clic en puntos
+- ✅ **Geolocalización** del usuario en tiempo real
+- ✅ **Diseño responsive** para dispositivos móviles
 
 ---
 
-**🌱 RutaCEA – Tu huella sustentable, en tu bolsillo.**
+## 🎨 Estilos y UI
+
+### Paleta de Colores
+
+|Color|Código HEX|Uso|
+|---|---|---|
+|Verde Bosque|`#2d6a3f`|Color primario|
+|Verde Oscuro|`#1a4a2a`|Color secundario|
+|Verde Claro|`#8bc34a`|Color de acento|
+|Blanco Verdoso|`#f8fbf8`|Fondo principal|
+|Texto Principal|`#1a2a1a`|Texto principal|
+|Texto Secundario|`#5a7a6a`|Texto secundario|
+### Colores de Rutas
+
+|Ruta|Código HEX|
+|---|---|
+|**Verde**|`#4CAF50`|
+|**Azul**|`#2196F3`|
+|**Naranja**|`#FF9800`|
+### Tipografía
+
+|Propiedad|Valor|
+|---|---|
+|**Fuente principal**|'Inter', sans-serif|
+|**Fuente alternativa**|-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto|
+|**Pesos**|400-600 (cuerpo), 700-800 (títulos)|
+### Diseño
+
+- ✅ **Mobile-First Design** - Optimizado para smartphones
+- ✅ **Responsive** - Adaptable a tablets y desktop
+- ✅ **Animaciones suaves** - Transiciones fluidas entre pantallas
+- ✅ **Interfaz intuitiva** - Fácil de usar para todos los públicos
+- ✅ **Accesibilidad** - Contraste adecuado y tamaños legibles
 
 ---
-¡Listo! Con estos tres archivos (`index.html`, `styles.css`, `script.js`) y el `README.md`, tendrás tu mockup funcional de RutaCEA. Solo necesitas copiar el contenido en VSCode y ejecutarlo con Live Server. Si quieres, puedo ayudarte a ajustar colores, agregar más puntos o modificar el comportamiento del mapa.
+
