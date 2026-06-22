@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>RutaCEA - Mapa Interactivo</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Estilos propios -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- ========== PANTALLA DE CARGA ========== -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-icon">🌱</div>
+            <h1>RutaCEA</h1>
+            <p>Descubre el Centro Educativo Ambiental</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- ========== PANTALLA DE INICIO (QR SIMULADO) ========== -->
+    <div id="home-screen" class="screen">
+        <div class="home-header">
+            <span class="badge">Parque O'Higgins</span>
+            <h2>🌱 RutaCEA</h2>
+            <p>Escanea el código QR para comenzar tu ruta</p>
+        </div>
+        <div class="qr-container">
+            <div class="qr-simulator">
+                <div class="qr-box">
+                    <div class="qr-icon">📱</div>
+                    <div class="qr-pulse"></div>
+                </div>
+                <p class="qr-hint">Simulación de escaneo QR</p>
+                <button id="btn-scan-qr" class="btn-primary">
+                    <i class="fas fa-camera"></i> Simular escaneo
+                </button>
+            </div>
+        </div>
+        <div class="home-footer">
+            <p>Rutas disponibles: <span class="route-badge green">Verde</span> <span class="route-badge blue">Azul</span> <span class="route-badge orange">Naranja</span></p>
+        </div>
+    </div>
+
+    <!-- ========== PANTALLA DE MAPA ========== -->
+    <div id="map-screen" class="screen hidden">
+        <!-- Header del mapa -->
+        <div class="map-header">
+            <button id="btn-back-home" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="map-title">
+                <span class="route-indicator green">●</span>
+                <span>Ruta <strong id="route-name-display">Verde</strong></span>
+            </div>
+            <button id="btn-legend" class="btn-legend">
+                <i class="fas fa-layer-group"></i>
+            </button>
+        </div>
+
+        <!-- Contenedor del mapa -->
+        <div id="map-container"></div>
+
+        <!-- Panel inferior con info del punto seleccionado -->
+        <div id="info-panel" class="info-panel hidden">
+            <div class="info-header">
+                <span id="point-icon" class="point-icon">📍</span>
+                <h3 id="point-title">Punto de interés</h3>
+                <button id="btn-close-info" class="btn-close-info"><i class="fas fa-times"></i></button>
+            </div>
+            <p id="point-description">Descripción del punto.</p>
+            <div id="point-media" class="point-media hidden">
+                <img id="point-image" src="" alt="Imagen del punto" />
+            </div>
+            <button id="btn-visit-cea" class="btn-secondary">Visitar CEA</button>
+        </div>
+
+        <!-- Leyenda -->
+        <div id="legend-modal" class="legend-modal hidden">
+            <div class="legend-content">
+                <h3><i class="fas fa-route"></i> Rutas disponibles</h3>
+                <div class="legend-item"><span class="legend-color green"></span> Ruta Verde (Corta - 10 min)</div>
+                <div class="legend-item"><span class="legend-color blue"></span> Ruta Azul (Media - 15 min)</div>
+                <div class="legend-item"><span class="legend-color orange"></span> Ruta Naranja (Larga - 20 min)</div>
+                <hr />
+                <div class="legend-item"><span class="legend-icon">🏛️</span> CEA - Centro Educativo Ambiental</div>
+                <div class="legend-item"><span class="legend-icon">🌿</span> Huerto Comunitario</div>
+                <div class="legend-item"><span class="legend-icon">♻️</span> Punto de Compostaje</div>
+                <div class="legend-item"><span class="legend-icon">🗑️</span> Punto de Reciclaje</div>
+                <button id="btn-close-legend" class="btn-close-legend">Cerrar</button>
+            </div>
+        </div>
+
+        <!-- Botón de ubicación -->
+        <button id="btn-locate" class="btn-locate">
+            <i class="fas fa-location-crosshairs"></i>
+        </button>
+
+        <!-- Selector de ruta -->
+        <div class="route-selector">
+            <button class="route-btn green active" data-route="green">Verde</button>
+            <button class="route-btn blue" data-route="blue">Azul</button>
+            <button class="route-btn orange" data-route="orange">Naranja</button>
+        </div>
+    </div>
+
+    <!-- ========== PANTALLA DE LLEGADA ========== -->
+    <div id="arrival-screen" class="screen hidden">
+        <div class="arrival-content">
+            <div class="arrival-icon">🎉</div>
+            <h2>¡Has llegado al CEA!</h2>
+            <p class="arrival-sub">Centro Educativo Ambiental</p>
+            <div class="arrival-stats">
+                <div class="stat"><span class="stat-num">2.4</span> km recorridos</div>
+                <div class="stat"><span class="stat-num">15</span> min de caminata</div>
+                <div class="stat"><span class="stat-num">3</span> puntos aprendidos</div>
+            </div>
+            <div class="arrival-actions">
+                <button class="btn-primary" onclick="resetApp()">
+                    <i class="fas fa-undo"></i> Nueva ruta
+                </button>
+                <button class="btn-secondary" onclick="showMap()">
+                    <i class="fas fa-map"></i> Ver mapa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Script propio -->
+    <script src="script.js"></script>
+</body>
+</html>

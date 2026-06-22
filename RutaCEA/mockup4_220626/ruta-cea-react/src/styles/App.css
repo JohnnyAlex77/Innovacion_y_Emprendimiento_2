@@ -1,0 +1,30 @@
+/* src/styles/App.css */
+.app {
+  max-width: 420px;
+  margin: 0 auto;
+  height: 100vh;
+  background: #f8fbf8;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.app-content {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d6a3f;
+  border-radius: 10px;
+}
