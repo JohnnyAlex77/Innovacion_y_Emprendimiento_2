@@ -1,69 +1,95 @@
 // ============================================
 // RutaCEA - Mapa Interactivo
+// COORDENADAS REALES - Parque O'Higgins
+// VERSIÓN CORREGIDA CON Z-INDEX Y FUNCIONALIDAD COMPLETA
 // ============================================
 
 // ===== CONFIGURACIÓN =====
 const CONFIG = {
-    // Coordenadas del Parque O'Higgins (Santiago, Chile)
-    parkCenter: [-33.4569, -70.6624],
+    parkCenter: [-33.4590, -70.6630],
     zoom: 16,
-    // Puntos de interés
+    
     points: {
         cea: {
             id: 'cea',
             name: 'Centro Educativo Ambiental (CEA)',
-            coords: [-33.4580, -70.6600],
+            coords: [-33.4597, -70.6635],
             icon: '🏛️',
-            description: 'Centro Educativo Ambiental de la Municipalidad de Santiago. Aquí podrás aprender sobre sustentabilidad, economía circular y participar en talleres y actividades.',
+            description: 'Centro Educativo Ambiental de la Municipalidad de Santiago. Aquí podrás aprender sobre sustentabilidad, economía circular y participar en talleres y actividades gratuitas para toda la comunidad.',
             image: 'https://placehold.co/600x400/2d6a3f/white?text=CEA'
         },
         huerto: {
             id: 'huerto',
             name: 'Huerto Comunitario',
-            coords: [-33.4572, -70.6615],
+            coords: [-33.4602, -70.6630],
             icon: '🌿',
-            description: 'Huerto urbano donde la comunidad cultiva verduras y hortalizas de forma orgánica. ¡Puedes participar y aprender sobre agricultura urbana!',
+            description: 'Huerto urbano comunitario donde se cultivan verduras, hortalizas y plantas nativas de forma orgánica. ¡Puedes participar en talleres de agricultura urbana!',
             image: 'https://placehold.co/600x400/4caf50/white?text=Huerto+Comunitario'
         },
         compostaje: {
             id: 'compostaje',
             name: 'Punto de Compostaje',
-            coords: [-33.4588, -70.6608],
+            coords: [-33.4590, -70.6640],
             icon: '♻️',
-            description: 'Punto de acopio de residuos orgánicos para compostaje. Aprende a transformar tus desechos en abono para las áreas verdes del parque.',
+            description: 'Punto de acopio de residuos orgánicos para compostaje. Aprende a transformar tus desechos en abono natural para las áreas verdes del parque.',
             image: 'https://placehold.co/600x400/ff9800/white?text=Compostaje'
         },
         reciclaje: {
             id: 'reciclaje',
             name: 'Punto de Reciclaje',
-            coords: [-33.4560, -70.6620],
+            coords: [-33.4585, -70.6625],
             icon: '🗑️',
-            description: 'Punto limpio para separar y reciclar vidrio, plástico, papel y cartón. ¡Cada residuo correctamente separado suma!',
+            description: 'Punto limpio para separar y reciclar vidrio, plástico, papel, cartón y latas. ¡Cada residuo correctamente separado contribuye al cuidado del medio ambiente!',
             image: 'https://placehold.co/600x400/2196f3/white?text=Reciclaje'
         }
     },
-    // Puertas de entrada
+    
     doors: {
-        mattaviel: { name: 'Metro Parque O\'Higgins', coords: [-33.4598, -70.6635], route: 'green' },
-        beauchef: { name: 'Av. Beauchef 938', coords: [-33.4550, -70.6610], route: 'blue' },
-        rondizzoni: { name: 'Av. General Rondizzoni 473', coords: [-33.4545, -70.6650], route: 'orange' }
+        entrada_matta: { 
+            name: 'Metro Parque O\'Higgins (Av. Matta con Viel)', 
+            coords: [-33.4608, -70.6655], 
+            route: 'green' 
+        },
+        entrada_beauchef: { 
+            name: 'Av. Beauchef 938', 
+            coords: [-33.4568, -70.6600], 
+            route: 'blue' 
+        },
+        entrada_rondizzoni: { 
+            name: 'Av. General Rondizzoni 473', 
+            coords: [-33.4540, -70.6655], 
+            route: 'orange' 
+        }
     },
-    // Rutas
+    
     routes: {
         green: {
             name: 'Verde',
             color: '#4caf50',
-            waypoints: [[-33.4598, -70.6635], [-33.4588, -70.6618], [-33.4580, -70.6600]]
+            waypoints: [
+                [-33.4608, -70.6655],
+                [-33.4603, -70.6645],
+                [-33.4597, -70.6635]
+            ]
         },
         blue: {
             name: 'Azul',
             color: '#2196f3',
-            waypoints: [[-33.4550, -70.6610], [-33.4565, -70.6605], [-33.4580, -70.6600]]
+            waypoints: [
+                [-33.4568, -70.6600],
+                [-33.4580, -70.6615],
+                [-33.4597, -70.6635]
+            ]
         },
         orange: {
             name: 'Naranja',
             color: '#ff9800',
-            waypoints: [[-33.4545, -70.6650], [-33.4560, -70.6630], [-33.4572, -70.6610], [-33.4580, -70.6600]]
+            waypoints: [
+                [-33.4540, -70.6655],
+                [-33.4555, -70.6645],
+                [-33.4575, -70.6635],
+                [-33.4597, -70.6635]
+            ]
         }
     }
 };
@@ -76,7 +102,7 @@ let state = {
     polylines: [],
     currentPolyline: null,
     userLocation: null,
-    isTracking: false
+    selectedPointId: null
 };
 
 // ===== DOM REFS =====
@@ -93,13 +119,12 @@ const legendModal = $('legend-modal');
 
 // ===== INICIALIZACIÓN =====
 document.addEventListener('DOMContentLoaded', function() {
-    // Ocultar splash después de animación
     setTimeout(() => {
         screens.splash.style.display = 'none';
-        // La home ya está visible por defecto
     }, 3500);
 
-    // Eventos
+    initMap();
+
     $('btn-scan-qr').addEventListener('click', handleScanQR);
     $('btn-back-home').addEventListener('click', goHome);
     $('btn-legend').addEventListener('click', toggleLegend);
@@ -108,19 +133,28 @@ document.addEventListener('DOMContentLoaded', function() {
     $('btn-locate').addEventListener('click', locateUser);
     $('btn-visit-cea').addEventListener('click', () => showPointInfo('cea'));
 
-    // Selector de ruta
     document.querySelectorAll('.route-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const route = this.dataset.route;
             switchRoute(route);
         });
     });
+
+    // ✅ Cerrar info panel al hacer clic fuera de él
+    document.addEventListener('click', function(e) {
+        if (infoPanel && !infoPanel.classList.contains('hidden')) {
+            const isClickInside = infoPanel.contains(e.target);
+            const isClickOnMarker = e.target.closest('.leaflet-marker-icon') || e.target.closest('.leaflet-popup');
+            if (!isClickInside && !isClickOnMarker) {
+                hideInfoPanel();
+            }
+        }
+    });
 });
 
 // ===== ACCIONES =====
 
 function handleScanQR() {
-    // Simular escaneo QR - elegir ruta aleatoria
     const routes = ['green', 'blue', 'orange'];
     const randomRoute = routes[Math.floor(Math.random() * routes.length)];
     switchRoute(randomRoute);
@@ -132,11 +166,9 @@ function showMap() {
     screens.map.classList.remove('hidden');
     screens.arrival.classList.add('hidden');
 
-    // Inicializar mapa si no existe
-    if (!state.map) {
-        initMap();
-    } else {
-        state.map.invalidateSize();
+    if (state.map) {
+        setTimeout(() => state.map.invalidateSize(), 300);
+        state.map.setView(CONFIG.parkCenter, 16);
     }
 }
 
@@ -155,16 +187,19 @@ function showArrival() {
 
 function resetApp() {
     goHome();
-    // Resetear selección de ruta
     document.querySelectorAll('.route-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector('.route-btn.green').classList.add('active');
     state.currentRoute = 'green';
     updateRouteDisplay('green');
+    drawRoute('green');
+    hideInfoPanel();
 }
 
 // ===== MAPA =====
 
 function initMap() {
+    if (state.map) return;
+
     state.map = L.map(mapContainer, {
         center: CONFIG.parkCenter,
         zoom: CONFIG.zoom,
@@ -172,30 +207,26 @@ function initMap() {
         attributionControl: true
     });
 
-    // Capa de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
     }).addTo(state.map);
 
-    // Ajustar tamaño
-    setTimeout(() => state.map.invalidateSize(), 300);
+    // ✅ Forzar que el contenedor del mapa ocupe todo el espacio
+    setTimeout(() => {
+        state.map.invalidateSize();
+    }, 300);
 
-    // Dibujar puntos y rutas
     drawPoints();
     drawRoute(state.currentRoute);
-
-    // Evento click en mapa
-    state.map.on('click', function(e) {
-        // Verificar si se hizo clic en un marcador (ya manejado por el popup)
-    });
 }
 
 function drawPoints() {
-    // Limpiar marcadores anteriores
+    if (!state.map) return;
+
     state.markers.forEach(m => state.map.removeLayer(m));
     state.markers = [];
 
-    // Agregar puntos de interés
     Object.values(CONFIG.points).forEach(point => {
         const marker = L.marker(point.coords, {
             icon: L.divIcon({
@@ -206,7 +237,11 @@ function drawPoints() {
             })
         }).addTo(state.map);
 
-        // Popup
+        // ✅ Evento click en el marcador para mostrar info
+        marker.on('click', function() {
+            showPointInfo(point.id);
+        });
+
         marker.bindPopup(`
             <strong>${point.icon} ${point.name}</strong><br>
             <span style="font-size:13px;color:#4a5a4a;">${point.description.substring(0, 80)}...</span><br>
@@ -220,15 +255,19 @@ function drawPoints() {
 }
 
 function drawRoute(routeKey) {
+    if (!state.map) {
+        console.warn('Mapa no inicializado');
+        return;
+    }
+
     const route = CONFIG.routes[routeKey];
     if (!route) return;
 
-    // Limpiar polyline anterior
     if (state.currentPolyline) {
         state.map.removeLayer(state.currentPolyline);
+        state.currentPolyline = null;
     }
 
-    // Dibujar nueva ruta
     state.currentPolyline = L.polyline(route.waypoints, {
         color: route.color,
         weight: 5,
@@ -237,11 +276,9 @@ function drawRoute(routeKey) {
         smoothFactor: 1
     }).addTo(state.map);
 
-    // Ajustar vista para mostrar toda la ruta
     const bounds = L.latLngBounds(route.waypoints);
-    state.map.fitBounds(bounds, { padding: [40, 40] });
+    state.map.fitBounds(bounds, { padding: [50, 50] });
 
-    // Actualizar UI
     updateRouteDisplay(routeKey);
 }
 
@@ -249,7 +286,6 @@ function switchRoute(routeKey) {
     state.currentRoute = routeKey;
     drawRoute(routeKey);
 
-    // Actualizar botones
     document.querySelectorAll('.route-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.route === routeKey);
     });
@@ -274,7 +310,11 @@ function showPointInfo(pointId) {
     const point = CONFIG.points[pointId];
     if (!point) return;
 
-    const panel = infoPanel;
+    // ✅ Cerrar cualquier popup abierto
+    state.markers.forEach(m => m.closePopup());
+
+    state.selectedPointId = pointId;
+
     document.getElementById('point-icon').textContent = point.icon;
     document.getElementById('point-title').textContent = point.name;
     document.getElementById('point-description').textContent = point.description;
@@ -289,7 +329,6 @@ function showPointInfo(pointId) {
         media.classList.add('hidden');
     }
 
-    // Cambiar texto del botón si es CEA
     const btn = document.getElementById('btn-visit-cea');
     if (pointId === 'cea') {
         btn.textContent = '🎉 ¡Llegaste al CEA!';
@@ -303,11 +342,12 @@ function showPointInfo(pointId) {
         btn.onclick = () => showPointInfo('cea');
     }
 
-    panel.classList.remove('hidden');
+    infoPanel.classList.remove('hidden');
 }
 
 function hideInfoPanel() {
     infoPanel.classList.add('hidden');
+    state.selectedPointId = null;
 }
 
 // ===== LEGENDA =====
@@ -328,7 +368,6 @@ function locateUser() {
                 const lng = position.coords.longitude;
                 const userLatLng = [lat, lng];
 
-                // Agregar marcador de ubicación
                 if (state.userLocation) {
                     state.map.removeLayer(state.userLocation);
                 }

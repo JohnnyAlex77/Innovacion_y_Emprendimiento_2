@@ -55,7 +55,7 @@
 
     <!-- ========== PANTALLA DE MAPA ========== -->
     <div id="map-screen" class="screen hidden">
-        <!-- Header del mapa -->
+        <!-- Header del mapa (SIEMPRE encima del mapa) -->
         <div class="map-header">
             <button id="btn-back-home" class="btn-back">
                 <i class="fas fa-arrow-left"></i>
@@ -69,7 +69,7 @@
             </button>
         </div>
 
-        <!-- Contenedor del mapa -->
+        <!-- Contenedor del mapa (detrás de todo) -->
         <div id="map-container"></div>
 
         <!-- Panel inferior con info del punto seleccionado -->
@@ -102,12 +102,12 @@
             </div>
         </div>
 
-        <!-- Botón de ubicación -->
+        <!-- Botón de ubicación (flotante sobre el mapa) -->
         <button id="btn-locate" class="btn-locate">
             <i class="fas fa-location-crosshairs"></i>
         </button>
 
-        <!-- Selector de ruta -->
+        <!-- Selector de ruta (SIEMPRE visible sobre el mapa) -->
         <div class="route-selector">
             <button class="route-btn green active" data-route="green">Verde</button>
             <button class="route-btn blue" data-route="blue">Azul</button>
