@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RutaCEA - Códigos QR</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f4f0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-size: 28px;
+      color: #1a4a2a;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #5a7a6a;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    .qr-card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      text-align: center;
+      border: 2px solid #e8ede8;
+      transition: transform 0.2s;
+    }
+    .qr-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+    .qr-card .qr-image {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 12px;
+      display: block;
+    }
+    .qr-card .route-badge {
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .route-badge.green { background: #2E7D32; }
+    .route-badge.blue { background: #1976D2; }
+    .route-badge.orange { background: #F57C00; }
+
+    .qr-card h3 {
+      font-size: 18px;
+      color: #1a2a1a;
+      margin-bottom: 4px;
+    }
+    .qr-card .address {
+      font-size: 13px;
+      color: #5a7a6a;
+      margin-bottom: 8px;
+    }
+    .qr-card .description {
+      font-size: 12px;
+      color: #6a8a6a;
+      line-height: 1.5;
+    }
+    .qr-card .divider {
+      border: none;
+      border-top: 1px solid #e8ede8;
+      margin: 12px 0;
+    }
+    .qr-card .url {
+      font-size: 11px;
+      color: #8aa88a;
+      background: #f5f8f5;
+      padding: 4px 12px;
+      border-radius: 12px;
+      display: inline-block;
+      font-family: monospace;
+    }
+    @media print {
+      body { padding: 20px; background: white; }
+      .qr-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+      .qr-card:hover { transform: none; }
+    }
+    @media (max-width: 480px) {
+      .qr-card .qr-image { width: 160px; height: 160px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🌱 RutaCEA</h1>
+  <p class="subtitle">Códigos QR para las puertas de entrada al Parque O'Higgins</p>
+
+  <div class="qr-grid">
+
+    <!-- QR 1 - Ruta Verde -->
+    <div class="qr-card">
+      <span class="route-badge green">🌿 Ruta Verde</span>
+      <img class="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://rutacea.cl/entrada/matta&bgcolor=ffffff&color=2E7D32&margin=20" alt="QR Ruta Verde" />
+      <h3>Metro Parque O'Higgins</h3>
+      <p class="address">Av. Viel con Av. Matta</p>
+      <hr class="divider" />
+      <p class="description">
+        🚶 Ruta corta · 10 min<br />
+        Escanea y camina al Centro Educativo Ambiental
+      </p>
+      <hr class="divider" />
+      <span class="url">rutacea.cl/entrada/matta</span>
+    </div>
+
+    <!-- QR 2 - Ruta Azul -->
+    <div class="qr-card">
+      <span class="route-badge blue">💧 Ruta Azul</span>
+      <img class="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://rutacea.cl/entrada/beauchef&bgcolor=ffffff&color=1976D2&margin=20" alt="QR Ruta Azul" />
+      <h3>Entrada Av. Beauchef</h3>
+      <p class="address">Av. Beauchef 938</p>
+      <hr class="divider" />
+      <p class="description">
+        🚶 Ruta media · 15 min<br />
+        Escanea y camina al Centro Educativo Ambiental
+      </p>
+      <hr class="divider" />
+      <span class="url">rutacea.cl/entrada/beauchef</span>
+    </div>
+
+    <!-- QR 3 - Ruta Naranja -->
+    <div class="qr-card">
+      <span class="route-badge orange">🟠 Ruta Naranja</span>
+      <img class="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://rutacea.cl/entrada/rondizzoni&bgcolor=ffffff&color=F57C00&margin=20" alt="QR Ruta Naranja" />
+      <h3>Entrada Av. Rondizzoni</h3>
+      <p class="address">Av. General Rondizzoni 473</p>
+      <hr class="divider" />
+      <p class="description">
+        🚶 Ruta larga · 20 min<br />
+        Escanea y camina al Centro Educativo Ambiental
+      </p>
+      <hr class="divider" />
+      <span class="url">rutacea.cl/entrada/rondizzoni</span>
+    </div>
+
+  </div>
+
+  <p style="margin-top: 30px; font-size: 12px; color: #8aa88a;">
+    📌 Imprime y coloca cada QR en la entrada correspondiente del Parque O'Higgins
+  </p>
+</body>
+</html>
