@@ -72,9 +72,6 @@ El CEA se encuentra ubicado dentro del **Parque O'Higgins**, un espacio públic
 |**🚪 Puerta Metro O'Higgins**|-33.460633988030054|-70.65835487634902|🚪|Entrada|
 |**🚪 Puerta Beauchef**|-33.460597099786604|-70.66386247064762|🚪|Entrada|
 |**🚪 Puerta Rondizzoni**|-33.46978340588195|-70.65958600292596|🚪|Entrada|
-|**🌿 Huerto Comunitario**|-33.4641296733008|-70.66252323979717|🌿|Interés|
-|**♻️ Punto de Compostaje**|-33.46420117310819|-70.66254692201362|♻️|Interés|
-|**🗑️ Punto de Reciclaje**|-33.46408263401791|-70.66274314688243|🗑️|Interés|
 
 ---
 
