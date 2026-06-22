@@ -1,120 +1,104 @@
 // ============================================================
-//  RutaCEA – Mapa Interactivo del CEA
+//  RutaCEA – Mapa Interactivo del CEA (MOCKUP 1 CORREGIDO)
 // ============================================================
 
-// Coordenadas del CEA (centro del mapa)
-const CEA_CENTER = [-33.4598, -70.6640];
+const CEA_CENTER = [-33.4597, -70.6635];
 const ZOOM_LEVEL = 16;
 
 // ============================================================
-// 1. DEFINICIÓN DE PUNTOS DE INTERÉS (POIs)
+// 1. PUNTOS DE INTERÉS (COORDENADAS REALES)
 // ============================================================
 const POIS = [
   {
     id: 'cea',
     nombre: 'CEA (Edificio Principal)',
-    coords: [-33.4598, -70.6638],
+    coords: [-33.4597, -70.6635],
     icono: 'fa-building',
     color: '#2E7D32',
-    descripcion: 'Centro Educativo Ambiental – Edificio principal, huertos y salas de talleres.'
+    descripcion: 'Centro Educativo Ambiental – Edificio principal, huertos y talleres.'
   },
   {
     id: 'huerto',
     nombre: 'Huerto del CEA',
-    coords: [-33.4605, -70.6645],
+    coords: [-33.4602, -70.6630],
     icono: 'fa-seedling',
     color: '#388E3C',
-    descripcion: 'Huerto educativo – Cultivo de verduras, hierbas y plantas nativas.'
+    descripcion: 'Huerto educativo – Cultivo de verduras y plantas nativas.'
   },
   {
     id: 'compostaje',
     nombre: 'Área de Compostaje',
-    coords: [-33.4589, -70.6632],
+    coords: [-33.4590, -70.6640],
     icono: 'fa-recycle',
     color: '#6D4C41',
-    descripcion: 'Punto de Compostaje – Transformación de residuos orgánicos en tierra fértil.'
+    descripcion: 'Punto de Compostaje – Transformación de residuos orgánicos.'
   },
   {
     id: 'reciclaje',
     nombre: 'Punto de Reciclaje',
-    coords: [-33.4595, -70.6650],
+    coords: [-33.4585, -70.6625],
     icono: 'fa-trash-can',
     color: '#1565C0',
-    descripcion: 'Punto Limpio – Separación de residuos reciclables (plástico, vidrio, papel).'
+    descripcion: 'Punto Limpio – Separación de residuos reciclables.'
   },
   {
     id: 'entrada-verde',
-    nombre: 'Entrada Parque (Av. Blanco Encalada)',
-    coords: [-33.4610, -70.6640],
+    nombre: 'Entrada Metro O\'Higgins',
+    coords: [-33.4608, -70.6655],
     icono: 'fa-person-walking',
     color: '#2E7D32',
-    descripcion: 'Entrada Principal – Comienza aquí la Ruta Verde.'
+    descripcion: 'Entrada Principal – Comienza la Ruta Verde.'
   },
   {
     id: 'entrada-azul',
-    nombre: 'Entrada Parque (Av. Beaucheff)',
-    coords: [-33.4580, -70.6610],
+    nombre: 'Entrada Av. Beauchef',
+    coords: [-33.4568, -70.6600],
     icono: 'fa-person-walking',
     color: '#1976D2',
-    descripcion: 'Entrada Secundaria – Comienza aquí la Ruta Azul.'
+    descripcion: 'Entrada Secundaria – Comienza la Ruta Azul.'
   },
   {
     id: 'entrada-naranja',
-    nombre: 'Entrada Parque (Av. Matta)',
-    coords: [-33.4602, -70.6670],
+    nombre: 'Entrada Av. Rondizzoni',
+    coords: [-33.4540, -70.6655],
     icono: 'fa-person-walking',
     color: '#F57C00',
-    descripcion: 'Entrada por Av. Matta – Comienza aquí la Ruta Naranja.'
+    descripcion: 'Entrada por Av. Rondizzoni – Comienza la Ruta Naranja.'
   }
 ];
 
 // ============================================================
-// 2. DEFINICIÓN DE RUTAS
+// 2. RUTAS (COORDENADAS REALES)
 // ============================================================
 const RUTAS = {
   green: {
     id: 'green',
     nombre: 'Ruta Verde',
     color: '#2E7D32',
-    puntos: [
-      [-33.4610, -70.6640],
-      [-33.4606, -70.6642],
-      [-33.4602, -70.6640],
-      [-33.4598, -70.6638]
-    ]
+    puntos: [[-33.4608, -70.6655], [-33.4603, -70.6645], [-33.4597, -70.6635]]
   },
   blue: {
     id: 'blue',
     nombre: 'Ruta Azul',
     color: '#1976D2',
-    puntos: [
-      [-33.4580, -70.6610],
-      [-33.4584, -70.6620],
-      [-33.4588, -70.6630],
-      [-33.4598, -70.6638]
-    ]
+    puntos: [[-33.4568, -70.6600], [-33.4580, -70.6615], [-33.4597, -70.6635]]
   },
   orange: {
     id: 'orange',
     nombre: 'Ruta Naranja',
     color: '#F57C00',
-    puntos: [
-      [-33.4602, -70.6670],
-      [-33.4600, -70.6658],
-      [-33.4598, -70.6648],
-      [-33.4598, -70.6638]
-    ]
+    puntos: [[-33.4540, -70.6655], [-33.4555, -70.6645], [-33.4575, -70.6635], [-33.4597, -70.6635]]
   }
 };
 
 // ============================================================
-// 3. ESTADO DE LA APLICACIÓN
+// 3. ESTADO
 // ============================================================
 const state = {
   map: null,
   markers: [],
   rutasLayers: [],
-  activeRoutes: ['green', 'blue', 'orange'], // todas activas por defecto
+  activeRoutes: ['green', 'blue', 'orange'],
   currentLocationMarker: null
 };
 
@@ -122,30 +106,22 @@ const state = {
 // 4. INICIALIZACIÓN DEL MAPA
 // ============================================================
 function initMap() {
-  // Crear mapa
   const map = L.map('map', {
     center: CEA_CENTER,
     zoom: ZOOM_LEVEL,
     zoomControl: true,
-    fadeAnimation: true,
     attributionControl: true
   });
 
-  // Capa base (OpenStreetMap)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: '&copy; OpenStreetMap'
   }).addTo(map);
 
   state.map = map;
-
-  // Agregar controles de zoom en posición personalizada
   map.zoomControl.setPosition('bottomright');
 
-  // ============================================================
-  // 5. AGREGAR MARCADORES (POIs)
-  // ============================================================
+  // Agregar marcadores
   POIS.forEach(poi => {
-    // Icono personalizado usando divIcon
     const icon = L.divIcon({
       className: 'custom-marker',
       html: `<i class="fas ${poi.icono}" style="color: white; font-size: 14px; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"></i>`,
@@ -156,55 +132,39 @@ function initMap() {
 
     const marker = L.marker(poi.coords, { icon })
       .addTo(map)
-      .bindPopup(`
-        <strong>${poi.nombre}</strong><br>
-        ${poi.descripcion}
-      `);
+      .bindPopup(`<strong>${poi.nombre}</strong><br>${poi.descripcion}`);
 
-    // Guardar referencia para usar después
     marker.poiData = poi;
     state.markers.push(marker);
   });
 
-  // ============================================================
-  // 6. AGREGAR RUTAS
-  // ============================================================
+  // Agregar rutas
   Object.values(RUTAS).forEach(ruta => {
     const polyline = L.polyline(ruta.puntos, {
       color: ruta.color,
       weight: 5,
-      opacity: 0.8,
-      dashArray: null,
-      smoothFactor: 1
+      opacity: 0.8
     }).addTo(map);
-
-    // Guardar referencia
     polyline.rutaData = ruta;
     state.rutasLayers.push(polyline);
   });
 
-  // ============================================================
-  // 7. AJUSTAR VISTA PARA MOSTRAR TODOS LOS PUNTOS
-  // ============================================================
-  const allCoords = POIS.map(p => p.coords);
-  const bounds = L.latLngBounds(allCoords);
+  // Ajustar vista
+  const bounds = L.latLngBounds(POIS.map(p => p.coords));
   map.fitBounds(bounds, { padding: [50, 50] });
 
-  // ============================================================
-  // 8. EVENTOS Y CONTROLES
-  // ============================================================
-  setupEventListeners();
+  setTimeout(() => map.invalidateSize(), 300);
 
-  return map;
+  setupEventListeners();
 }
 
 // ============================================================
-// 9. CONFIGURAR EVENTOS Y CONTROLES UI
+// 5. EVENTOS
 // ============================================================
 function setupEventListeners() {
   const map = state.map;
 
-  // --- Botón "Mi ubicación" ---
+  // Ubicación
   document.getElementById('btn-location').addEventListener('click', () => {
     if (!navigator.geolocation) {
       alert('Tu navegador no soporta geolocalización.');
@@ -213,15 +173,12 @@ function setupEventListeners() {
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const { latitude, longitude } = pos.coords;
-        const userLatLng = [latitude, longitude];
+        const userLatLng = [pos.coords.latitude, pos.coords.longitude];
 
-        // Remover marcador anterior si existe
         if (state.currentLocationMarker) {
           map.removeLayer(state.currentLocationMarker);
         }
 
-        // Crear marcador de ubicación
         const icon = L.divIcon({
           className: 'custom-marker-location',
           html: `<i class="fas fa-circle" style="color: #D32F2F; font-size: 18px; text-shadow: 0 0 8px white;"></i>`,
@@ -236,73 +193,55 @@ function setupEventListeners() {
 
         map.setView(userLatLng, 17);
       },
-      (err) => {
-        alert('No se pudo obtener tu ubicación. Verifica los permisos de ubicación.');
-        console.warn('Geolocation error:', err);
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
+      () => alert('No se pudo obtener tu ubicación.'),
+      { enableHighAccuracy: true }
     );
   });
 
-  // --- Botón "Acerca de" ---
+  // Acerca de
   document.getElementById('btn-about').addEventListener('click', () => {
-    // Cambiar a la pestaña "Acerca de"
     activateTab('info');
   });
 
-  // --- Pestañas ---
+  // Pestañas
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const tabId = btn.dataset.tab;
-      activateTab(tabId);
+      activateTab(btn.dataset.tab);
     });
   });
 
-  // --- Lista de POIs (click para centrar) ---
+  // Lista de POIs
   document.getElementById('poi-list').addEventListener('click', (e) => {
     const li = e.target.closest('li');
     if (!li) return;
-    const poiId = li.dataset.poiId;
-    const poi = POIS.find(p => p.id === poiId);
+    const poi = POIS.find(p => p.id === li.dataset.poiId);
     if (!poi) return;
 
-    // Centrar mapa en el POI
     map.setView(poi.coords, 17);
-
-    // Abrir popup del marcador correspondiente
-    const marker = state.markers.find(m => m.poiData.id === poiId);
-    if (marker) {
-      marker.openPopup();
-    }
+    const marker = state.markers.find(m => m.poiData.id === poi.id);
+    if (marker) marker.openPopup();
   });
 
-  // --- Botones de rutas ---
+  // Rutas
   document.querySelectorAll('.route-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const routeId = btn.dataset.route;
-      toggleRoute(routeId);
+      toggleRoute(btn.dataset.route);
     });
   });
 }
 
 // ============================================================
-// 10. FUNCIONES DE UI
+// 6. FUNCIONES UI
 // ============================================================
-
-// Activar una pestaña
 function activateTab(tabId) {
-  // Actualizar botones
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabId);
   });
-
-  // Actualizar contenido
   document.querySelectorAll('.tab-content').forEach(tab => {
     tab.classList.toggle('active', tab.id === `tab-${tabId}`);
   });
 }
 
-// Renderizar lista de POIs
 function renderPoiList() {
   const list = document.getElementById('poi-list');
   list.innerHTML = '';
@@ -318,84 +257,49 @@ function renderPoiList() {
   });
 }
 
-// Mostrar/ocultar una ruta
 function toggleRoute(routeId) {
   const map = state.map;
 
   if (routeId === 'all') {
-    // Alternar entre mostrar todas y ocultar todas
     const allVisible = state.activeRoutes.length === Object.keys(RUTAS).length;
+
     if (allVisible) {
-      // Ocultar todas
-      state.rutasLayers.forEach(layer => {
-        map.removeLayer(layer);
-      });
+      state.rutasLayers.forEach(layer => map.removeLayer(layer));
       state.activeRoutes = [];
     } else {
-      // Mostrar todas
-      state.rutasLayers.forEach(layer => {
-        map.addLayer(layer);
-      });
+      state.rutasLayers.forEach(layer => map.addLayer(layer));
       state.activeRoutes = Object.keys(RUTAS);
     }
 
-    // Actualizar estilo de botones
-    document.querySelectorAll('.route-btn').forEach(btn => {
-      btn.classList.toggle('active-route', state.activeRoutes.includes(btn.dataset.route) || (btn.dataset.route === 'all' && state.activeRoutes.length === Object.keys(RUTAS).length));
-    });
+    const allBtn = document.querySelector('.route-btn[data-route="all"]');
+    if (allBtn) {
+      const visible = state.activeRoutes.length === Object.keys(RUTAS).length;
+      allBtn.innerHTML = visible ? '<i class="fas fa-eye-slash"></i> Ocultar todas' : '<i class="fas fa-eye"></i> Mostrar todas';
+      allBtn.classList.toggle('active-route', visible);
+    }
     return;
   }
 
-  // Ruta específica
   const index = state.activeRoutes.indexOf(routeId);
   const layer = state.rutasLayers.find(l => l.rutaData.id === routeId);
-
   if (!layer) return;
 
   if (index === -1) {
-    // Agregar ruta
     map.addLayer(layer);
     state.activeRoutes.push(routeId);
   } else {
-    // Quitar ruta
     map.removeLayer(layer);
     state.activeRoutes.splice(index, 1);
   }
 
-  // Actualizar estilo del botón
   const btn = document.querySelector(`.route-btn[data-route="${routeId}"]`);
-  if (btn) {
-    btn.classList.toggle('active-route', state.activeRoutes.includes(routeId));
-  }
-
-  // Actualizar botón "Mostrar todas"
-  const allBtn = document.querySelector('.route-btn[data-route="all"]');
-  if (allBtn) {
-    const allVisible = state.activeRoutes.length === Object.keys(RUTAS).length;
-    allBtn.classList.toggle('active-route', allVisible);
-    allBtn.innerHTML = allVisible
-      ? '<i class="fas fa-eye-slash"></i> Ocultar todas'
-      : '<i class="fas fa-eye"></i> Mostrar todas';
-  }
+  if (btn) btn.classList.toggle('active-route', state.activeRoutes.includes(routeId));
 }
 
 // ============================================================
-// 11. INICIALIZAR APLICACIÓN
+// 7. INICIALIZAR
 // ============================================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   initMap();
   renderPoiList();
-
-  // Activar todas las rutas por defecto (visual)
-  document.querySelectorAll('.route-btn').forEach(btn => {
-    if (btn.dataset.route !== 'all') {
-      btn.classList.add('active-route');
-    }
-  });
-
-  // Mostrar todas las rutas activas
-  const allBtn = document.querySelector('.route-btn[data-route="all"]');
-  if (allBtn) {
-    allBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar todas';
-  }
 });

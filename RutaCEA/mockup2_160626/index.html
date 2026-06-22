@@ -4,23 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>RutaCEA – Mapa Interactivo CEA</title>
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <!-- Google Fonts (Alternativa: 'Quicksand' para un look más amigable) -->
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <!-- CSS propio -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div id="app">
-    <!-- HEADER: distinto, con fondo oscuro y logo más visible -->
     <header id="main-header">
       <div class="header-left">
-        <div class="logo-icon">
-          <i class="fas fa-leaf"></i>
-        </div>
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
         <div>
           <h1>RutaCEA</h1>
           <span class="subtitle-header">Centro Educativo Ambiental</span>
@@ -36,46 +29,25 @@
       </div>
     </header>
 
-    <!-- MAPA: ocupa la mayor parte de la pantalla -->
     <div id="map-container">
       <div id="map"></div>
-      <!-- Mini indicador de "Escanea el QR" (flotante) -->
-      <div class="floating-badge">
-        <i class="fas fa-qrcode"></i> Escanea el QR en el parque
-      </div>
-      <!-- Contador de puntos (solo visual) -->
-      <div class="floating-counter">
-        <i class="fas fa-map-pin"></i> <span id="poi-counter">7</span>
-      </div>
+      <div class="floating-badge"><i class="fas fa-qrcode"></i> Escanea el QR en el parque</div>
+      <div class="floating-counter"><i class="fas fa-map-pin"></i> <span id="poi-counter">7</span></div>
     </div>
 
-    <!-- DRAWER (panel deslizable desde abajo) -->
     <div id="bottom-drawer">
-      <div class="drawer-handle">
-        <span></span>
-      </div>
+      <div class="drawer-handle"><span></span></div>
       <div class="drawer-content">
-        <!-- Tabs con diseño más moderno (tipo chips) -->
         <div class="tabs">
-          <button class="tab-btn active" data-tab="explore">
-            <i class="fas fa-compass"></i> Explorar
-          </button>
-          <button class="tab-btn" data-tab="routes">
-            <i class="fas fa-route"></i> Rutas
-          </button>
-          <button class="tab-btn" data-tab="info">
-            <i class="fas fa-circle-info"></i> Info
-          </button>
+          <button class="tab-btn active" data-tab="explore"><i class="fas fa-compass"></i> Explorar</button>
+          <button class="tab-btn" data-tab="routes"><i class="fas fa-route"></i> Rutas</button>
+          <button class="tab-btn" data-tab="info"><i class="fas fa-circle-info"></i> Info</button>
         </div>
 
-        <!-- Tab: Explorar (puntos en formato tarjetas) -->
         <div class="tab-content active" id="tab-explore">
-          <div id="poi-cards">
-            <!-- Se llena con JS -->
-          </div>
+          <div id="poi-cards"></div>
         </div>
 
-        <!-- Tab: Rutas (con toggles y vista previa) -->
         <div class="tab-content" id="tab-routes">
           <div class="route-preview">
             <p class="route-intro"><i class="fas fa-arrows-spin"></i> Activa las rutas para guiarte al CEA</p>
@@ -96,25 +68,18 @@
                 <span class="toggle-indicator"><i class="fas fa-check-circle"></i></span>
               </label>
             </div>
-            <button id="toggle-all-routes" class="btn-ghost">
-              <i class="fas fa-eye"></i> Ocultar todas
-            </button>
+            <button id="toggle-all-routes" class="btn-ghost"><i class="fas fa-eye-slash"></i> Ocultar todas</button>
           </div>
         </div>
 
-        <!-- Tab: Info -->
         <div class="tab-content" id="tab-info">
           <div class="about-card">
-            <div class="about-icon">
-              <i class="fas fa-seedling"></i>
-            </div>
+            <div class="about-icon"><i class="fas fa-seedling"></i></div>
             <h3>¿Qué es RutaCEA?</h3>
             <p>RutaCEA es un mapa interactivo que te invita a descubrir el <strong>Centro Educativo Ambiental</strong> en el Parque O'Higgins.</p>
-            <p><i class="fas fa-route" style="color: #2E7D32;"></i> Sigue las rutas de colores y explora huertos, compostaje y reciclaje.</p>
             <div class="about-badges">
               <span><i class="fas fa-mobile-screen"></i> Sin app</span>
               <span><i class="fas fa-qrcode"></i> Escanea y camina</span>
-              <span><i class="fas fa-graduation-cap"></i> Aprende gratis</span>
             </div>
             <hr />
             <p><small>Proyecto INACAP – Innovación y Emprendimiento II</small></p>
@@ -124,9 +89,7 @@
     </div>
   </div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Script propio -->
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>RutaCEA – Mapa interactivo CEA</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ========================================
+       RESET Y ESTILOS BASE
+       ======================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f7f5;
+      color: #1e2a1e;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ========================================
+       HEADER
+       ======================================== */
+    #main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background-color: #ffffff;
+      border-bottom: 2px solid #e8ede8;
+      flex-shrink: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-left h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1e3a1e;
+      letter-spacing: -0.3px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #4a6a4a;
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-icon:hover {
+      background-color: #eef4ee;
+    }
+
+    /* ========================================
+       SUBTÍTULO
+       ======================================== */
+    #subtitle {
+      padding: 6px 16px;
+      background-color: #eef4ee;
+      font-size: 0.75rem;
+      color: #3a5a3a;
+      font-weight: 500;
+      flex-shrink: 0;
+      border-bottom: 1px solid #dce6dc;
+      text-align: center;
+    }
+
+    /* ========================================
+       MAPA - CORREGIDO CON ALTURA EXPLÍCITA
+       ======================================== */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100%;
+    }
+
+    #map-container {
+      flex: 1 1 auto;
+      min-height: 200px;
+      position: relative;
+      background: #e8ede8;
+      z-index: 0;
+      width: 100%;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .leaflet-container {
+      z-index: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .leaflet-control-zoom {
+      border: none !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .leaflet-control-zoom a {
+      background: white !important;
+      color: #2e4a2e !important;
+      font-weight: 600;
+      border: 1px solid #dce6dc !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10) !important;
+    }
+
+    .leaflet-popup-content {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: #1e2a1e;
+      line-height: 1.5;
+    }
+
+    /* ========================================
+       PANEL INFERIOR
+       ======================================== */
+    #bottom-panel {
+      flex-shrink: 0;
+      background-color: #ffffff;
+      border-top: 2px solid #e8ede8;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      max-height: 45vh;
+      z-index: 10;
+      position: relative;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e8ede8;
+      background: #fafcfa;
+      flex-shrink: 0;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 0;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #6a8a6a;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      background-color: #f0f6f0;
+    }
+
+    .tab-btn.active {
+      color: #1e4a1e;
+      border-bottom-color: #2E7D32;
+      background-color: #f0f6f0;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 12px 16px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 120px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* ========================================
+       LISTA DE PUNTOS
+       ======================================== */
+    #poi-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    #poi-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background-color: #f8faf8;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-left: 4px solid #2E7D32;
+    }
+
+    #poi-list li:hover {
+      background-color: #eef4ee;
+    }
+
+    #poi-list li .poi-icon {
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    #poi-list li .poi-name {
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: #1e2a1e;
+      flex: 1;
+    }
+
+    #poi-list li .poi-badge {
+      font-size: 0.65rem;
+      background: #e8ede8;
+      padding: 2px 10px;
+      border-radius: 20px;
+      color: #4a6a4a;
+    }
+
+    /* ========================================
+       CONTROLES DE RUTAS
+       ======================================== */
+    .route-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .route-btn {
+      padding: 10px 12px;
+      border: none;
+      background: #f8faf8;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: #1e2a1e;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-left: 4px solid #ccc;
+    }
+
+    .route-btn:hover {
+      background: #eef4ee;
+    }
+
+    .route-btn.active-route {
+      background: #e8f0e8;
+      box-shadow: inset 0 0 0 1px #2E7D32;
+    }
+
+    .route-btn[data-route="all"] {
+      grid-column: 1 / -1;
+    }
+
+    .route-help {
+      font-size: 0.7rem;
+      color: #6a8a6a;
+      text-align: center;
+    }
+
+    /* ========================================
+       ACERCA DE
+       ======================================== */
+    .about-content h3 {
+      font-size: 0.95rem;
+      color: #1e3a1e;
+      margin-bottom: 6px;
+    }
+
+    .about-content p {
+      font-size: 0.8rem;
+      color: #3a4a3a;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .about-content hr {
+      border: none;
+      border-top: 1px solid #e8ede8;
+      margin: 10px 0;
+    }
+
+    .about-content small {
+      font-size: 0.65rem;
+      color: #6a8a6a;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 400px) {
+      .header-left h1 { font-size: 1.0rem; }
+      .tab-btn { font-size: 0.7rem; padding: 8px 0; }
+      #poi-list li { padding: 8px 10px; }
+      #poi-list li .poi-name { font-size: 0.75rem; }
+      .route-btn { font-size: 0.7rem; padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- HEADER -->
+    <header id="main-header">
+      <div class="header-left">
+        <i class="fas fa-leaf" style="color: #2E7D32; font-size: 1.5rem;"></i>
+        <h1>RutaCEA</h1>
+      </div>
+      <div class="header-right">
+        <button id="btn-location" class="btn-icon" title="Mi ubicación">
+          <i class="fas fa-location-dot"></i>
+        </button>
+        <button id="btn-about" class="btn-icon" title="Acerca de">
+          <i class="fas fa-circle-info"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- SUBTÍTULO -->
+    <div id="subtitle">
+      <span>Centro Educativo Ambiental – Parque O'Higgins</span>
+    </div>
+
+    <!-- MAPA -->
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+
+    <!-- PANEL INFERIOR -->
+    <div id="bottom-panel">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="poi"><i class="fas fa-map-pin"></i> Puntos</button>
+        <button class="tab-btn" data-tab="routes"><i class="fas fa-route"></i> Rutas</button>
+        <button class="tab-btn" data-tab="info"><i class="fas fa-seedling"></i> Acerca</button>
+      </div>
+
+      <div class="tab-content active" id="tab-poi">
+        <ul id="poi-list"></ul>
+      </div>
+
+      <div class="tab-content" id="tab-routes">
+        <div class="route-controls">
+          <button class="route-btn active-route" data-route="green" style="border-left: 4px solid #2E7D32;">
+            <i class="fas fa-circle" style="color: #2E7D32;"></i> Ruta Verde
+          </button>
+          <button class="route-btn active-route" data-route="blue" style="border-left: 4px solid #1976D2;">
+            <i class="fas fa-circle" style="color: #1976D2;"></i> Ruta Azul
+          </button>
+          <button class="route-btn active-route" data-route="orange" style="border-left: 4px solid #F57C00;">
+            <i class="fas fa-circle" style="color: #F57C00;"></i> Ruta Naranja
+          </button>
+          <button class="route-btn active-route" data-route="all" style="border-left: 4px solid #757575;">
+            <i class="fas fa-eye-slash"></i> Ocultar todas
+          </button>
+        </div>
+        <p class="route-help"><i class="fas fa-info-circle"></i> Haz clic en una ruta para mostrarla/ocultarla.</p>
+      </div>
+
+      <div class="tab-content" id="tab-info">
+        <div class="about-content">
+          <h3><i class="fas fa-leaf" style="color: #2E7D32;"></i> ¿Qué es RutaCEA?</h3>
+          <p>RutaCEA es un mapa interactivo que te guía por los espacios del <strong>Centro Educativo Ambiental</strong> dentro del Parque O'Higgins.</p>
+          <p><i class="fas fa-route" style="color: #1976D2;"></i> Sigue las rutas de colores para llegar al CEA.</p>
+          <hr />
+          <p><small>Proyecto INACAP – Innovación y Emprendimiento II</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ============================================================
+    //  RutaCEA – Mapa Interactivo del CEA (MOCKUP 1 CORREGIDO)
+    // ============================================================
+
+    const CEA_CENTER = [-33.4597, -70.6635];
+    const ZOOM_LEVEL = 16;
+
+    // ============================================================
+    // 1. PUNTOS DE INTERÉS (COORDENADAS REALES)
+    // ============================================================
+    const POIS = [
+      {
+        id: 'cea',
+        nombre: 'CEA (Edificio Principal)',
+        coords: [-33.4597, -70.6635],
+        icono: 'fa-building',
+        color: '#2E7D32',
+        descripcion: 'Centro Educativo Ambiental – Edificio principal, huertos y talleres.'
+      },
+      {
+        id: 'huerto',
+        nombre: 'Huerto del CEA',
+        coords: [-33.4602, -70.6630],
+        icono: 'fa-seedling',
+        color: '#388E3C',
+        descripcion: 'Huerto educativo – Cultivo de verduras y plantas nativas.'
+      },
+      {
+        id: 'compostaje',
+        nombre: 'Área de Compostaje',
+        coords: [-33.4590, -70.6640],
+        icono: 'fa-recycle',
+        color: '#6D4C41',
+        descripcion: 'Punto de Compostaje – Transformación de residuos orgánicos.'
+      },
+      {
+        id: 'reciclaje',
+        nombre: 'Punto de Reciclaje',
+        coords: [-33.4585, -70.6625],
+        icono: 'fa-trash-can',
+        color: '#1565C0',
+        descripcion: 'Punto Limpio – Separación de residuos reciclables.'
+      },
+      {
+        id: 'entrada-verde',
+        nombre: 'Entrada Metro O\'Higgins',
+        coords: [-33.4608, -70.6655],
+        icono: 'fa-person-walking',
+        color: '#2E7D32',
+        descripcion: 'Entrada Principal – Comienza la Ruta Verde.'
+      },
+      {
+        id: 'entrada-azul',
+        nombre: 'Entrada Av. Beauchef',
+        coords: [-33.4568, -70.6600],
+        icono: 'fa-person-walking',
+        color: '#1976D2',
+        descripcion: 'Entrada Secundaria – Comienza la Ruta Azul.'
+      },
+      {
+        id: 'entrada-naranja',
+        nombre: 'Entrada Av. Rondizzoni',
+        coords: [-33.4540, -70.6655],
+        icono: 'fa-person-walking',
+        color: '#F57C00',
+        descripcion: 'Entrada por Av. Rondizzoni – Comienza la Ruta Naranja.'
+      }
+    ];
+
+    // ============================================================
+    // 2. RUTAS (COORDENADAS REALES)
+    // ============================================================
+    const RUTAS = {
+      green: {
+        id: 'green',
+        nombre: 'Ruta Verde',
+        color: '#2E7D32',
+        puntos: [[-33.4608, -70.6655], [-33.4603, -70.6645], [-33.4597, -70.6635]]
+      },
+      blue: {
+        id: 'blue',
+        nombre: 'Ruta Azul',
+        color: '#1976D2',
+        puntos: [[-33.4568, -70.6600], [-33.4580, -70.6615], [-33.4597, -70.6635]]
+      },
+      orange: {
+        id: 'orange',
+        nombre: 'Ruta Naranja',
+        color: '#F57C00',
+        puntos: [[-33.4540, -70.6655], [-33.4555, -70.6645], [-33.4575, -70.6635], [-33.4597, -70.6635]]
+      }
+    };
+
+    // ============================================================
+    // 3. ESTADO
+    // ============================================================
+    const state = {
+      map: null,
+      markers: [],
+      rutasLayers: [],
+      activeRoutes: ['green', 'blue', 'orange'],
+      currentLocationMarker: null
+    };
+
+    // ============================================================
+    // 4. INICIALIZACIÓN DEL MAPA
+    // ============================================================
+    function initMap() {
+      console.log('Inicializando mapa...');
+
+      const map = L.map('map', {
+        center: CEA_CENTER,
+        zoom: ZOOM_LEVEL,
+        zoomControl: true,
+        attributionControl: true
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      state.map = map;
+      map.zoomControl.setPosition('bottomright');
+
+      // Agregar marcadores
+      POIS.forEach(poi => {
+        const icon = L.divIcon({
+          className: 'custom-marker',
+          html: `<i class="fas ${poi.icono}" style="color: white; font-size: 14px; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"></i>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -32]
+        });
+
+        const marker = L.marker(poi.coords, { icon })
+          .addTo(map)
+          .bindPopup(`<strong>${poi.nombre}</strong><br>${poi.descripcion}`);
+
+        marker.poiData = poi;
+        state.markers.push(marker);
+      });
+
+      // Agregar rutas
+      Object.values(RUTAS).forEach(ruta => {
+        const polyline = L.polyline(ruta.puntos, {
+          color: ruta.color,
+          weight: 5,
+          opacity: 0.8
+        }).addTo(map);
+        polyline.rutaData = ruta;
+        state.rutasLayers.push(polyline);
+      });
+
+      // Ajustar vista
+      const bounds = L.latLngBounds(POIS.map(p => p.coords));
+      map.fitBounds(bounds, { padding: [50, 50] });
+
+      // ✅ FORZAR ACTUALIZACIÓN DEL TAMAÑO
+      setTimeout(() => {
+        map.invalidateSize();
+        console.log('Mapa invalidado');
+      }, 500);
+
+      setupEventListeners();
+    }
+
+    // ============================================================
+    // 5. EVENTOS
+    // ============================================================
+    function setupEventListeners() {
+      const map = state.map;
+
+      // Ubicación
+      document.getElementById('btn-location').addEventListener('click', () => {
+        if (!navigator.geolocation) {
+          alert('Tu navegador no soporta geolocalización.');
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const userLatLng = [pos.coords.latitude, pos.coords.longitude];
+
+            if (state.currentLocationMarker) {
+              map.removeLayer(state.currentLocationMarker);
+            }
+
+            const icon = L.divIcon({
+              className: 'custom-marker-location',
+              html: `<i class="fas fa-circle" style="color: #D32F2F; font-size: 18px; text-shadow: 0 0 8px white;"></i>`,
+              iconSize: [18, 18],
+              iconAnchor: [9, 9]
+            });
+
+            state.currentLocationMarker = L.marker(userLatLng, { icon })
+              .addTo(map)
+              .bindPopup('📍 Estás aquí')
+              .openPopup();
+
+            map.setView(userLatLng, 17);
+          },
+          () => alert('No se pudo obtener tu ubicación.'),
+          { enableHighAccuracy: true }
+        );
+      });
+
+      // Acerca de
+      document.getElementById('btn-about').addEventListener('click', () => {
+        activateTab('info');
+      });
+
+      // Pestañas
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activateTab(btn.dataset.tab);
+        });
+      });
+
+      // Lista de POIs
+      document.getElementById('poi-list').addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+        const poi = POIS.find(p => p.id === li.dataset.poiId);
+        if (!poi) return;
+
+        map.setView(poi.coords, 17);
+        const marker = state.markers.find(m => m.poiData.id === poi.id);
+        if (marker) marker.openPopup();
+      });
+
+      // Rutas
+      document.querySelectorAll('.route-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          toggleRoute(btn.dataset.route);
+        });
+      });
+    }
+
+    // ============================================================
+    // 6. FUNCIONES UI
+    // ============================================================
+    function activateTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.toggle('active', tab.id === `tab-${tabId}`);
+      });
+    }
+
+    function renderPoiList() {
+      const list = document.getElementById('poi-list');
+      list.innerHTML = '';
+      POIS.forEach(poi => {
+        const li = document.createElement('li');
+        li.dataset.poiId = poi.id;
+        li.innerHTML = `
+          <span class="poi-icon"><i class="fas ${poi.icono}" style="color: ${poi.color};"></i></span>
+          <span class="poi-name">${poi.nombre}</span>
+          <span class="poi-badge">${poi.descripcion.split('–')[0].trim()}</span>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function toggleRoute(routeId) {
+      const map = state.map;
+
+      if (routeId === 'all') {
+        const allVisible = state.activeRoutes.length === Object.keys(RUTAS).length;
+
+        if (allVisible) {
+          state.rutasLayers.forEach(layer => map.removeLayer(layer));
+          state.activeRoutes = [];
+        } else {
+          state.rutasLayers.forEach(layer => map.addLayer(layer));
+          state.activeRoutes = Object.keys(RUTAS);
+        }
+
+        const allBtn = document.querySelector('.route-btn[data-route="all"]');
+        if (allBtn) {
+          const visible = state.activeRoutes.length === Object.keys(RUTAS).length;
+          allBtn.innerHTML = visible ? '<i class="fas fa-eye-slash"></i> Ocultar todas' : '<i class="fas fa-eye"></i> Mostrar todas';
+          allBtn.classList.toggle('active-route', visible);
+        }
+        return;
+      }
+
+      const index = state.activeRoutes.indexOf(routeId);
+      const layer = state.rutasLayers.find(l => l.rutaData.id === routeId);
+      if (!layer) return;
+
+      if (index === -1) {
+        map.addLayer(layer);
+        state.activeRoutes.push(routeId);
+      } else {
+        map.removeLayer(layer);
+        state.activeRoutes.splice(index, 1);
+      }
+
+      const btn = document.querySelector(`.route-btn[data-route="${routeId}"]`);
+      if (btn) btn.classList.toggle('active-route', state.activeRoutes.includes(routeId));
+    }
+
+    // ============================================================
+    // 7. INICIALIZAR
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM cargado');
+      renderPoiList();
+      initMap();
+    });
+  </script>
+</body>
+</html>
