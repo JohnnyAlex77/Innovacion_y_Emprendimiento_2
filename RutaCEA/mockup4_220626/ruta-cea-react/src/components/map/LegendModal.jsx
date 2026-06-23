@@ -1,4 +1,6 @@
 // src/components/map/LegendModal.jsx
+
+
 import { ROUTES } from '../../data/routes';
 import { POINTS_LIST } from '../../data/points';
 import '../../styles/components.css';
@@ -8,7 +10,7 @@ export const LegendModal = ({ onClose }) => {
   const points = POINTS_LIST;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} style={{ zIndex: 100 }}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3 className="modal-title">📖 Leyenda</h3>
@@ -17,7 +19,7 @@ export const LegendModal = ({ onClose }) => {
 
         <div className="modal-body">
           <div className="legend-section">
-            <h4>Rutas</h4>
+            <h4>🚶 Rutas</h4>
             {routes.map((route) => (
               <div key={route.id} className="legend-item">
                 <div 
@@ -32,7 +34,7 @@ export const LegendModal = ({ onClose }) => {
           </div>
 
           <div className="legend-section">
-            <h4>Puntos de Interés</h4>
+            <h4>📍 Puntos de Interés</h4>
             {points.map((point) => (
               <div key={point.id} className="legend-item">
                 <span className="legend-icon">{point.icon}</span>
@@ -45,7 +47,7 @@ export const LegendModal = ({ onClose }) => {
           </div>
 
           <div className="legend-section">
-            <h4>Puertas de Entrada</h4>
+            <h4>🚪 Puertas de Entrada</h4>
             <div className="legend-item">
               <span className="legend-icon">🚪</span>
               <span className="legend-label">Puertas del parque</span>

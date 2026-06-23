@@ -1,4 +1,5 @@
 // src/components/map/RouteSelector.jsx
+
 import { useApp } from '../../context/AppContext';
 import { ROUTES } from '../../data/routes';
 import '../../styles/components.css';
@@ -9,7 +10,7 @@ export const RouteSelector = () => {
   const routes = Object.values(ROUTES);
 
   return (
-    <div className="route-selector">
+    <div className="route-selector" style={{ zIndex: 20, position: 'relative' }}>
       <div className="route-selector-content">
         {routes.map((route) => (
           <button
@@ -17,7 +18,8 @@ export const RouteSelector = () => {
             className={`route-btn ${currentRoute === route.id ? 'active' : ''}`}
             style={{
               '--route-color': route.color,
-              borderColor: currentRoute === route.id ? route.color : '#ddd'
+              borderColor: currentRoute === route.id ? route.color : '#ddd',
+              backgroundColor: currentRoute === route.id ? `${route.color}15` : 'white'
             }}
             onClick={() => switchRoute(route.id)}
           >

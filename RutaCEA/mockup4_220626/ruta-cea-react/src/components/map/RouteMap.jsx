@@ -95,7 +95,7 @@ export const RouteMap = () => {
 
   const handleUserLocation = () => {
     if (mapRef.current && userLocation) {
-      mapRef.current.flyTo(userLocation, 17);
+      mapRef.current.flyTo(userLocation, 18); // ZOOM MÁS CERCANO
     }
   };
 
@@ -103,10 +103,18 @@ export const RouteMap = () => {
     <div className="route-map-container">
       <MapContainer
         ref={mapRef}
-        center={[-33.46403756318918, -70.66265950496233]}
-        zoom={16}
+        center={[-33.46413, -70.66259]} //Centrado en el CEA
+        zoom={17} // ZOOM MÁS CERCANO (era 16)
         zoomControl={false}
-        style={{ height: '100%', width: '100%' }}
+        style={{ 
+          height: '100%', 
+          width: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 0 
+        }}
+        className="leaflet-map"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -188,8 +196,30 @@ export const RouteMap = () => {
                 <div className="marker-popup">
                   <div className="popup-icon">{point.icon}</div>
                   <h4>{point.name}</h4>
-                  <p className="popup-description">{point.description.substring(0, 100)}...</p>
+                  <p className="popup-description">
+                    {point.description.substring(0, 80)}...
+                  </p>
                   {isVisited && <span className="visited-badge">✅ Visitado</span>}
+                  <br />
+                  <button 
+                    className="popup-detail-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePointClick(point);
+                    }}
+                    style={{
+                      marginTop: '8px',
+                      background: '#2d6a3f',
+                      color: 'white',
+                      border: 'none',
+                      padding: '4px 12px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    📍 Ver más
+                  </button>
                 </div>
               </Popup>
             </Marker>
@@ -227,6 +257,7 @@ export const RouteMap = () => {
         className="geo-btn"
         onClick={handleUserLocation}
         title="Centrar en mi ubicación"
+        style={{ zIndex: 50 }} 
       >
         📍
       </button>

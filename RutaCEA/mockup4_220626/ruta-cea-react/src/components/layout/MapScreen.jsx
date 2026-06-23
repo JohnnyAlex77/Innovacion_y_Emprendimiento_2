@@ -27,33 +27,48 @@ export const MapScreen = () => {
 
   return (
     <div className="map-screen">
-      <header className="map-header">
+      {/* HEADER - z-index: 10 */}
+      <header className="map-header" style={{ zIndex: 10, position: 'relative' }}>
         <button className="back-btn" onClick={handleBack}>
           ← Volver
         </button>
         <h2 className="map-title">
-          Ruta <span className="route-name">{currentRoute}</span>
+          Ruta <span className="route-name" style={{ color: currentRoute === 'green' ? '#4caf50' : currentRoute === 'blue' ? '#2196f3' : '#ff9800' }}>
+            {currentRoute.charAt(0).toUpperCase() + currentRoute.slice(1)}
+          </span>
         </h2>
         <button className="legend-btn" onClick={toggleLegend}>
           📖
         </button>
       </header>
 
-      <div className="map-container">
+      {/* MAPA - ocupa todo el espacio restante */}
+      <div className="map-container" style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
         <RouteMap />
       </div>
 
-      <RouteSelector />
+      {/* SELECTOR DE RUTA - z-index: 20 */}
+      <div style={{ position: 'relative', zIndex: 20 }}>
+        <RouteSelector />
+      </div>
 
+      {/* INFO PANEL - z-index: 30 */}
       {selectedPoint && (
-        <InfoPanel 
-          point={selectedPoint} 
-          onClose={clearSelectedPoint}
-          onVisitCEA={arriveToCEA}
-        />
+        <div style={{ position: 'relative', zIndex: 30 }}>
+          <InfoPanel 
+            point={selectedPoint} 
+            onClose={clearSelectedPoint}
+            onVisitCEA={arriveToCEA}
+          />
+        </div>
       )}
 
-      {showLegend && <LegendModal onClose={toggleLegend} />}
+      {/* LEGEND MODAL - z-index: 100 */}
+      {showLegend && (
+        <div style={{ position: 'fixed', zIndex: 100 }}>
+          <LegendModal onClose={toggleLegend} />
+        </div>
+      )}
     </div>
   );
 };

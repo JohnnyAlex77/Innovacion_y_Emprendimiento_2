@@ -1012,3 +1012,82 @@
     border-radius: 20px 20px 16px 16px;
   }
 }
+
+/* ===== FIX Z-INDEX DEL MAPA ===== */
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+.route-map-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== FIX SCROLL EN POPUP ===== */
+.leaflet-popup-content {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.leaflet-popup-content::-webkit-scrollbar {
+  width: 3px;
+}
+
+.leaflet-popup-content::-webkit-scrollbar-thumb {
+  background: #2d6a3f;
+  border-radius: 10px;
+}
+
+/* ===== BOTÓN VER MÁS EN POPUP ===== */
+.popup-detail-btn {
+  margin-top: 8px;
+  background: #2d6a3f;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.popup-detail-btn:hover {
+  background: #1a4a2a;
+  transform: scale(1.02);
+}
+
+/* ===== INFO PANEL CON SCROLL ===== */
+.info-panel-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.info-panel-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.info-panel-content::-webkit-scrollbar-thumb {
+  background: #2d6a3f;
+  border-radius: 10px;
+}
+
+.info-description {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 14px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.info-description::-webkit-scrollbar {
+  width: 3px;
+}
+
+.info-description::-webkit-scrollbar-thumb {
+  background: #2d6a3f;
+  border-radius: 10px;
+}
