@@ -12,7 +12,7 @@ export const DOORS = {
     id: 'door2',
     name: 'Puerta 2 - Beauchef',
     address: 'Av. Beauchef 938',
-    coords: [-33.460597099786604, -70.66386247064762], // ✅ ACTUALIZADO
+    coords: [-33.46704, -70.66340], // ✅ ACTUALIZADO
     route: 'blue',
     icon: '🚪'
   },

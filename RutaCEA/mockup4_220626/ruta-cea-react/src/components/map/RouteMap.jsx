@@ -1,6 +1,8 @@
 // src/components/map/RouteMap.jsx
+// ✅ SOLUCIÓN: Desactivar popups de Leaflet, usar solo InfoPanel de React
+
 import { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useApp } from '../../context/AppContext';
@@ -34,13 +36,64 @@ const createCustomIcon = (emoji, isDestination = false) => {
         border: 3px solid ${isDestination ? '#4caf50' : '#ddd'};
         box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
+        cursor: pointer;
       ">
         ${emoji}
       </div>
     `,
     iconSize: [40, 40],
     iconAnchor: [20, 20],
-    popupAnchor: [0, -20]
+    popupAnchor: [0, -20],
+    // ✅ IMPORTANTE: Desactivar el popup automático
+    interactive: true
+  });
+};
+
+// ✅ Crear icono para puertas (sin popup)
+const createDoorIcon = (isSelected) => {
+  return L.divIcon({
+    className: 'door-marker',
+    html: `
+      <div style="
+        background: ${isSelected ? '#2d6a3f' : '#666'};
+        color: white;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        border: 2px solid ${isSelected ? '#4caf50' : '#999'};
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        cursor: pointer;
+      ">
+        🚪
+      </div>
+    `,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    interactive: true
+  });
+};
+
+// ✅ Crear icono de ubicación de usuario
+const createUserIcon = () => {
+  return L.divIcon({
+    className: 'user-marker',
+    html: `
+      <div style="
+        background: #2196f3;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        border: 3px solid white;
+        box-shadow: 0 0 0 8px rgba(33, 150, 243, 0.3);
+        animation: pulse-ring 2s infinite;
+      "></div>
+    `,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8]
   });
 };
 
@@ -51,10 +104,12 @@ export const RouteMap = () => {
     userLocation, 
     setUserLocation,
     visits,
-    setVisits
+    setVisits,
+    selectedPoint
   } = useApp();
   
   const mapRef = useRef(null);
+  const markerRefs = useRef({});
 
   // Obtener la ruta actual
   const route = ROUTES[currentRoute];
@@ -86,8 +141,23 @@ export const RouteMap = () => {
     }
   }, [currentRoute, routePoints]);
 
+  // ✅ Efecto para cerrar popups cuando se selecciona un punto
+  useEffect(() => {
+    if (selectedPoint && mapRef.current) {
+      // Cerrar todos los popups de Leaflet
+      mapRef.current.closePopup();
+    }
+  }, [selectedPoint]);
+
   const handlePointClick = (point) => {
+    // ✅ Cerrar cualquier popup de Leaflet abierto
+    if (mapRef.current) {
+      mapRef.current.closePopup();
+    }
+    
+    // ✅ Abrir el InfoPanel de React
     selectPoint(point);
+    
     if (!visits.includes(point.id)) {
       setVisits([...visits, point.id]);
     }
@@ -95,16 +165,19 @@ export const RouteMap = () => {
 
   const handleUserLocation = () => {
     if (mapRef.current && userLocation) {
-      mapRef.current.flyTo(userLocation, 18); // ZOOM MÁS CERCANO
+      mapRef.current.flyTo(userLocation, 18);
     }
   };
+
+  // ✅ Obtener el punto CEA para referencia
+  const ceaPoint = POINTS_LIST.find(p => p.id === 'cea');
 
   return (
     <div className="route-map-container">
       <MapContainer
         ref={mapRef}
-        center={[-33.46413, -70.66259]} //Centrado en el CEA
-        zoom={17} // ZOOM MÁS CERCANO (era 16)
+        center={[-33.46413, -70.66259]}
+        zoom={17}
         zoomControl={false}
         style={{ 
           height: '100%', 
@@ -112,9 +185,11 @@ export const RouteMap = () => {
           position: 'absolute',
           top: 0,
           left: 0,
-          zIndex: 0 
+          zIndex: 0
         }}
         className="leaflet-map"
+        // ✅ Desactivar popups al hacer clic en el mapa
+        onClick={() => {}}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -137,118 +212,59 @@ export const RouteMap = () => {
           />
         ))}
 
-        {/* Marcadores de puertas */}
+        {/* ✅ Marcadores de puertas (SIN POPUP) */}
         {DOORS_LIST.map((door) => {
           const isSelectedRoute = door.route === currentRoute;
           return (
             <Marker
               key={door.id}
               position={door.coords}
-              icon={L.divIcon({
-                className: 'door-marker',
-                html: `
-                  <div style="
-                    background: ${isSelectedRoute ? '#2d6a3f' : '#666'};
-                    color: white;
-                    border-radius: 50%;
-                    width: 32px;
-                    height: 32px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 16px;
-                    border: 2px solid ${isSelectedRoute ? '#4caf50' : '#999'};
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                  ">
-                    🚪
-                  </div>
-                `,
-                iconSize: [32, 32],
-                iconAnchor: [16, 16]
-              })}
-            >
-              <Popup>
-                <strong>{door.name}</strong>
-                <br />
-                {door.address}
-                <br />
-                <small>Ruta: {door.route}</small>
-              </Popup>
-            </Marker>
+              icon={createDoorIcon(isSelectedRoute)}
+              interactive={false} // ✅ Desactivar interacción
+              eventHandlers={{
+                click: (e) => {
+                  L.DomEvent.stopPropagation(e);
+                  // ✅ NO hacer nada, solo mostrar la puerta
+                }
+              }}
+            />
           );
         })}
 
-        {/* Marcadores de puntos de interés */}
+        {/* ✅ Marcadores de puntos de interés (SIN POPUP) */}
         {POINTS_LIST.map((point) => {
           const isDestination = point.id === 'cea';
           const isVisited = visits.includes(point.id);
+          const isSelected = selectedPoint?.id === point.id;
           
           return (
             <Marker
               key={point.id}
               position={point.coords}
-              icon={createCustomIcon(point.icon, isDestination)}
+              icon={createCustomIcon(
+                point.icon, 
+                isDestination,
+                isSelected
+              )}
+              interactive={true}
               eventHandlers={{
-                click: () => handlePointClick(point)
+                click: (e) => {
+                  L.DomEvent.stopPropagation(e);
+                  handlePointClick(point);
+                }
               }}
-            >
-              <Popup>
-                <div className="marker-popup">
-                  <div className="popup-icon">{point.icon}</div>
-                  <h4>{point.name}</h4>
-                  <p className="popup-description">
-                    {point.description.substring(0, 80)}...
-                  </p>
-                  {isVisited && <span className="visited-badge">✅ Visitado</span>}
-                  <br />
-                  <button 
-                    className="popup-detail-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePointClick(point);
-                    }}
-                    style={{
-                      marginTop: '8px',
-                      background: '#2d6a3f',
-                      color: 'white',
-                      border: 'none',
-                      padding: '4px 12px',
-                      borderRadius: '12px',
-                      fontSize: '12px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    📍 Ver más
-                  </button>
-                </div>
-              </Popup>
-            </Marker>
+              // ✅ IMPORTANTE: NO usar popup de Leaflet
+            />
           );
         })}
 
-        {/* Marcador de ubicación del usuario */}
+        {/* Marcador de ubicación del usuario (SIN POPUP) */}
         {userLocation && (
           <Marker
             position={userLocation}
-            icon={L.divIcon({
-              className: 'user-marker',
-              html: `
-                <div style="
-                  background: #2196f3;
-                  border-radius: 50%;
-                  width: 16px;
-                  height: 16px;
-                  border: 3px solid white;
-                  box-shadow: 0 0 0 8px rgba(33, 150, 243, 0.3);
-                  animation: pulse-ring 2s infinite;
-                "></div>
-              `,
-              iconSize: [16, 16],
-              iconAnchor: [8, 8]
-            })}
-          >
-            <Popup>Tu ubicación</Popup>
-          </Marker>
+            icon={createUserIcon()}
+            interactive={false}
+          />
         )}
       </MapContainer>
 
@@ -257,7 +273,23 @@ export const RouteMap = () => {
         className="geo-btn"
         onClick={handleUserLocation}
         title="Centrar en mi ubicación"
-        style={{ zIndex: 50 }} 
+        style={{ 
+          zIndex: 50,
+          position: 'absolute',
+          bottom: '90px',
+          right: '16px',
+          width: '44px',
+          height: '44px',
+          borderRadius: '50%',
+          background: 'white',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '20px',
+          border: 'none',
+          cursor: 'pointer'
+        }}
       >
         📍
       </button>
