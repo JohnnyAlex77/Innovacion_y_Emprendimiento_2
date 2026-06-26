@@ -1,0 +1,50 @@
+/* src/styles/App.css */
+/* ✅ VERSIÓN DESKTOP - Pantalla completa */
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #f8fbf8;
+  position: relative;
+  overflow: hidden;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* ✅ Eliminar el límite de ancho para desktop */
+.app-content {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ✅ Para desktop, quitar el border-radius y márgenes */
+@media (min-width: 768px) {
+  .app {
+    border-radius: 0 !important;
+    margin: 0 !important;
+    max-height: 100vh !important;
+    max-width: 100vw !important;
+  }
+  
+  .app-content {
+    border-radius: 0 !important;
+  }
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d6a3f;
+  border-radius: 10px;
+}
